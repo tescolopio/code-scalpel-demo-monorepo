@@ -17,6 +17,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/**", "/actuator/**").permitAll()
                 .anyRequest().authenticated()
             )
+            // CSRF disabled for stateless REST API demo
+            // In production, enable CSRF or use token-based authentication
             .csrf(csrf -> csrf.disable());
         
         return http.build();
