@@ -31,6 +31,21 @@ This monorepo contains:
   
 - **`pom.xml`**: Root multimodule Maven build
 
+## Code Scalpel Ninja Warrior Torture Tests
+
+The full 40-obstacle gauntlet is specified in [`Code_Scalpel_Ninja_Warrior_Torture_Tests.md`](./Code_Scalpel_Ninja_Warrior_Torture_Tests.md). All fixtures are present under `/torture-tests` and include per-obstacle expected outcomes (pass/fail behavior) so Code Scalpel can begin validation immediately.
+
+| Stage | Focus | Obstacles | Location | Expected Outcome (high level) |
+| --- | --- | --- | --- | --- |
+| 1. Qualifying Round | Parser & AST fundamentals | 8 | `torture-tests/qualifying-round` | Build correct ASTs or precise errors for unicode, syntax extremes, polyglots, incomplete code, comments, encodings, macros, and version variances |
+| 2. Dynamic Labyrinth | Dynamic language pathology | 7 | `torture-tests/dynamic-labyrinth` | Flag eval/exec, dynamic attrs/imports/metaclasses/patching/descriptors/factories with explicit uncertainty and taint propagation |
+| 3. Boundary Crossing | Cross-language contract enforcement | 6 | `torture-tests/stage3-boundary-crossing` | Reset trust at network/serialization hops; detect schema drift, type evaporation, ORM escape hatches, and MQ taint chains |
+| 4. Confidence Crisis | Uncertainty quantification | 6 | `torture-tests/stage-4-confidence-crisis` | Calibrated confidence, ambiguity acknowledgment, contradiction surfacing, and monotonic confidence decay along inference chains |
+| 5. Policy Fortress | Guardrail & policy bypass resistance | 7 | `torture-tests/policy-fortress` | Block incremental erosion, encoding evasion, transitive/semantic bypasses, config tampering, social engineering, and budget gaming |
+| 6. Mount Midoriyama | Sandbox & symbolic limits | 6 | `torture-tests/mount-midoriyama` | Contain sandbox escapes/resource abuse/side channels and enforce timeouts on path explosion and solver torture; resist adversarial agents |
+
+Evidence expectations (results, confidence, performance metrics, hashes) follow the master spec’s Evaluation Framework and are mirrored in each stage README for quick reference.
+
 ## Prerequisites
 
 - Java 21
