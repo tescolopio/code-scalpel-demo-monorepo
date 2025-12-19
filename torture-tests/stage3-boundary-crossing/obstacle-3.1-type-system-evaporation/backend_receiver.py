@@ -22,5 +22,5 @@ def update_role():
 
 
 if __name__ == "__main__":
-    # Debug server for fixture purposes; not meant for production.
-    app.run(port=8081, debug=True)
+    # Fixture server; keep debug disabled to avoid Werkzeug console exposure during analysis.
+    app.run(port=8081)
