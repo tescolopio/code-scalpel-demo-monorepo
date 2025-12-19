@@ -24,7 +24,7 @@ def execute_obfuscated(payload: str):
 
 def nested_eval(expr: str):
     # eval-of-eval turns single input into multiple executions.
-    return eval("eval(expr)")
+    return eval("eval(expr)", {"expr": expr})
 
 
 def comprehension_eval(values: list[str]):

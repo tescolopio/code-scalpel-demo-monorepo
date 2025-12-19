@@ -25,6 +25,7 @@ def patch_builtins():
 def patch_auth_module(module: ModuleType):
     # Disable authentication by overwriting implementation after import.
     module.check = lambda *_args, **_kwargs: True
+    auth.check = module.check
 
 
 def patch_logger():
@@ -37,4 +38,4 @@ def apply_patches(module: ModuleType):
     patch_auth_module(module)
     patch_logger()
     # Downstream calls now execute patched behavior rather than static source.
-    return module.check("any-token")
+    return auth.check("any-token")
