@@ -24,7 +24,7 @@ export const torture = (n) =>
               : 'mid-month'
             : 'pre-mid-month'
           : 'seventeen-or-less'
-        : 'eighteen-or-less'
+        : 'eighteen-or-less (fallback)'
 
 // Operator precedence with comma, void, bitwise, and grouping
 export const precedence = () =>
