@@ -2,6 +2,8 @@
 Descriptors/properties that execute arbitrary logic on attribute access.
 Expected: Treat property access as code execution and follow data flow through descriptor methods.
 """
+from __future__ import annotations
+
 from typing import Any
 
 
@@ -9,7 +11,7 @@ class AuditDescriptor:
     def __init__(self, name: str):
         self.name = name
 
-    def __get__(self, instance: Any, owner: type | None = None) -> Any:
+    def __get__(self, instance: Any, owner: type | None = None) -> "AuditDescriptor | str":
         if instance is None:
             return self
         # Attribute access triggers logging and data transformation.
