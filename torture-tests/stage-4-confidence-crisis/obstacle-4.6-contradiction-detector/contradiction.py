@@ -12,4 +12,4 @@ def process_user(validated_user_id: str, payload: dict):
     user_id = validated_user_id  # Trusts caller blindly
     if payload.get("mode") == "secure":
         return f"secure-mode:{user_id}"
-    return f"plaintext-mode:{user_id}:{payload.get('data')}"
+    return f"plaintext-mode:{user_id}"
