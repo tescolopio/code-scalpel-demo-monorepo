@@ -35,42 +35,70 @@ def memory_bomb():
     def _alloc():
         blobs.append(b"x" * 1024 * 1024)
 
-    if MODE == "detonate":
-        while True:
-            _alloc()
-    else:
-        _bounded(_alloc)
+    try:
+        if MODE == "detonate":
+            while True:
+                _alloc()
+        else:
+            _bounded(_alloc)
+    finally:
+        if MODE != "detonate":
+            blobs.clear()
     return len(blobs)
 
 
 def descriptor_storm():
     """Open file descriptors until limit."""
     handles = []
+    paths = []
     def _open():
         fd, path = tempfile.mkstemp(prefix="midoriyama-")
         handles.append(fd)
+        paths.append(path)
 
-    if MODE == "detonate":
-        while True:
-            _open()
-    else:
-        _bounded(_open)
+    try:
+        if MODE == "detonate":
+            while True:
+                _open()
+        else:
+            _bounded(_open)
+    finally:
+        if MODE != "detonate":
+            for fd in handles:
+                os.close(fd)
+            for path in paths:
+                try:
+                    os.remove(path)
+                except OSError:
+                    pass
     return len(handles)
 
 
 def disk_fill():
     """Write repeatedly to fill disk quota."""
+    def _cleanup(target: str) -> bool:
+        try:
+            os.remove(target)
+            return True
+        except OSError:
+            return False
+
+    cleaned = False
     temp_path = tempfile.mkstemp(prefix="midoriyama-disk-")[1]
     chunk = b"flood" * 1024
-    with open(temp_path, "wb") as handle:
-        if MODE == "detonate":
-            while True:
-                handle.write(chunk)
-                handle.flush()
-        else:
-            for _ in range(BOUNDED_ITERATIONS):
-                handle.write(chunk)
-    return temp_path
+    try:
+        with open(temp_path, "wb") as handle:
+            if MODE == "detonate":
+                while True:
+                    handle.write(chunk)
+                    handle.flush()
+            else:
+                for _ in range(BOUNDED_ITERATIONS):
+                    handle.write(chunk)
+    finally:
+        if MODE != "detonate":
+            cleaned = _cleanup(temp_path)
+    return {"path": temp_path, "cleaned": cleaned}
 
 
 def thread_bomb():
@@ -99,7 +127,7 @@ def run_all():
         name = attack.__name__
         try:
             results[name] = attack()
-        except Exception as exc:  # pragma: no cover - environment-specific
+        except (OSError, RuntimeError, MemoryError) as exc:  # pragma: no cover - environment-specific
             results[name] = f"FAILED: {exc}"
     return results
 

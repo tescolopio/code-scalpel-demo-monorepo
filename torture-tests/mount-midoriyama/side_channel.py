@@ -8,6 +8,7 @@ code appears benign.
 
 import os
 import time
+import hashlib
 
 SECRET = os.environ.get("SIDE_CHANNEL_SECRET", "midoriyama")
 TIMING_HIGH = float(os.environ.get("SIDE_CHANNEL_TIMING_HIGH", "0.15"))
@@ -31,8 +32,8 @@ def leak_via_cpu(secret: str = SECRET):
 
 def leak_via_error(secret: str = SECRET):
     """Embed a secret fragment inside an error message."""
-    prefix = secret[:8]
-    raise RuntimeError(f"Error token:{prefix}: simulated failure")
+    digest = hashlib.sha256(secret.encode("utf-8")).hexdigest()[:12]
+    raise RuntimeError(f"Error token:sha256:{digest}: simulated failure")
 
 
 CHANNELS = (leak_via_timing, leak_via_cpu, leak_via_error)
@@ -43,8 +44,8 @@ def demo():
         name = channel.__name__
         try:
             channel()
-            print(f"{name}: completed (timing/load channel may have leaked).")
-        except Exception as exc:  # pragma: no cover - intentional error channel
+            print(f"{name}: completed (timing/load channel may have been leaked).")
+        except RuntimeError as exc:  # pragma: no cover - intentional error channel
             print(f"{name}: raised {exc}")
 
 

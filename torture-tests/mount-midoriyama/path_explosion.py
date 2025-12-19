@@ -10,6 +10,7 @@ import os
 import random
 
 DEPTH = int(os.environ.get("PATH_EXPLOSION_DEPTH", "12"))
+SEED_MAX = 2 ** 16
 
 
 def branching_state_machine(seed: int, depth: int = DEPTH) -> int:
@@ -34,7 +35,7 @@ def explode_paths(runs: int = 3):
     """Trigger multiple independent explosions to amplify path count."""
     results = []
     for _ in range(runs):
-        seed = random.randint(1, 2 ** 16)
+        seed = random.randint(1, SEED_MAX)
         results.append(branching_state_machine(seed, depth=DEPTH))
     return results
 

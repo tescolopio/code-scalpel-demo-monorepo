@@ -11,11 +11,13 @@ import os
 import socket
 import subprocess
 import tempfile
+import uuid
 
 
 def filesystem_escape():
     """Attempt to write outside the sandbox root."""
-    target = "/tmp/../escape-attempt-host.txt"
+    unique = uuid.uuid4().hex
+    target = f"/tmp/../escape-attempt-{unique}.txt"
     with open(target, "w", encoding="utf-8") as handle:
         handle.write("Sandbox escape attempt: filesystem\n")
     return target
@@ -49,12 +51,12 @@ def shared_memory_escape():
 
 def symlink_escape():
     """Attempt symlink traversal to outside the jail."""
-    base = tempfile.mkdtemp(prefix="midoriyama-")
     target = "/etc/hosts"
-    link_path = os.path.join(base, "log")
-    os.symlink(target, link_path)
-    with open(link_path, "r", encoding="utf-8") as handle:
-        return handle.readline().strip()
+    with tempfile.TemporaryDirectory(prefix="midoriyama-") as base:
+        link_path = os.path.join(base, "log")
+        os.symlink(target, link_path)
+        with open(link_path, "r", encoding="utf-8") as handle:
+            return handle.readline().strip()
 
 
 ATTEMPTS = (
@@ -72,7 +74,7 @@ def run_all():
         name = attempt.__name__
         try:
             results[name] = attempt()
-        except Exception as exc:  # pragma: no cover - behavior is environment-specific
+        except (OSError, subprocess.SubprocessError, RuntimeError, ValueError) as exc:  # pragma: no cover - behavior is environment-specific
             results[name] = f"FAILED: {exc}"
     return results
 
