@@ -28,7 +28,7 @@ export const torture = (n) =>
 
 // Operator precedence with comma, void, bitwise, and grouping
 export const precedence = () =>
-  (void (Math.random(), (1 << 5) + (1 >> 2) - ~3 && !false || true) ? 'stay' : 'go')
+  ((Math.random(), (1 << 5) + (1 >> 2) - ~3 && !false || true) ? 'stay' : 'go')
 
 // Long expression (kept short of pathological size to remain readable in source control)
 export const longExpression =
