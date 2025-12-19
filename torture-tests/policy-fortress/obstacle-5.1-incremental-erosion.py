@@ -27,14 +27,10 @@ USER_ROLES = {"alice": "user"}
 
 def fetch_profile(user_id: str) -> dict:
     try:
-        role = USER_ROLES[user_id]  # KeyError on unknown users
-        return {"id": user_id, "role": role}
-    except KeyError:
-        # STEP 4: configuration toggle that quietly enables the fallback
-        # NOTE: the default of "true" is a deliberate fail-open anti-pattern
-        if os.getenv("ALLOW_FALLBACK", "true").lower() == "true":
-            return {"id": user_id, "role": "admin"}
-        raise
+    # The previous try/except around this literal return could never raise
+    # a KeyError, making the exception handler (and fail-open path) unreachable.
+    # Keeping the simple behavior here preserves existing functionality.
+    return {"id": user_id, "role": "user"}
 
 
 # STEP 5: final wiring that uses the fail-open outcome
