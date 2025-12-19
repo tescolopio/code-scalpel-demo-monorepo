@@ -9,9 +9,9 @@ class AuditDescriptor:
     def __init__(self, name: str):
         self.name = name
 
-    def __get__(self, instance: Any, owner: type | None = None) -> str:
+    def __get__(self, instance: Any, owner: type | None = None) -> Any:
         if instance is None:
-            return self  # type: ignore[return-value]
+            return self
         # Attribute access triggers logging and data transformation.
         instance.audit_log.append(f"read:{self.name}")
         return f"SELECT secret FROM vault WHERE id = '{instance._secret_id}'"
