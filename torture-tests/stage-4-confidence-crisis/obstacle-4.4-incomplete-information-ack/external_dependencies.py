@@ -12,7 +12,8 @@ def fetch_user_profile(user_id: str) -> dict:
         raise RuntimeError("PROFILE_API not configured")
     if not user_id.isalnum():
         raise ValueError("user_id failed basic validation")
-    profile_url = urljoin(api_base if api_base.endswith("/") else f"{api_base}/", f"users/{user_id}")
+    base = api_base if api_base.endswith("/") else f"{api_base}/"
+    profile_url = urljoin(base, f"users/{user_id}")
     response = requests.get(profile_url, timeout=3)
     response.raise_for_status()
     # Trusting remote validation: Code Scalpel must flag this as unknown.
