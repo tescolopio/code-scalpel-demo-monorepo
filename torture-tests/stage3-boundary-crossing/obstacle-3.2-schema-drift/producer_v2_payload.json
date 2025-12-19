@@ -1,0 +1,14 @@
+{
+  "orderId": "ORD-9921",
+  "totalCents": "1899",
+  "currency": "USD",
+  "lineItems": [
+    { "sku": "abc", "quantity": 1, "unitPriceCents": 899 },
+    { "sku": "def", "quantity": 1, "unitPriceCents": 1000 }
+  ],
+  "shipping": {
+    "method": "overnight",
+    "costCents": 299
+  },
+  "version": 2
+}

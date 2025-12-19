@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package inventory;
+
+message ProductRequest {
+  string id = 1;
+  string user_note = 2; // free-form text forwarded from GraphQL without validation
+}
+
+message ProductResponse {
+  string id = 1;
+  string name = 2;
+  int32 price_cents = 3;
+  string user_note = 4;
+}
+
+service Inventory {
+  rpc GetProduct(ProductRequest) returns (ProductResponse);
+}

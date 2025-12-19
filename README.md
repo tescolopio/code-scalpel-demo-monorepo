@@ -18,6 +18,7 @@ This monorepo contains:
   
 - **`/docker-compose.yml`**: PostgreSQL 15 database service
 
+- **`/torture-tests/stage3-boundary-crossing`**: Fixtures for the Boundary Crossing level of the Code Scalpel Ninja Warrior torture suite (cross-language contract, schema drift, protocol hopping, ORM leaks, and message queue taint)
 - **`/torture-tests/stage-4-confidence-crisis`**: Code Scalpel Ninja Warrior Stage 4 torture cases focused on uncertainty quantification
   
 - **`/.scalpel`**: Empty config directories
