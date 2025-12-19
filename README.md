@@ -27,6 +27,8 @@ This monorepo contains:
   - `policy/`: Policy configurations
   - `budget/`: Budget configurations
   
+- **`/torture-tests/mount-midoriyama`**: Stage 6 sandbox & symbolic execution torture tests derived from the Code Scalpel Ninja Warrior spec
+  
 - **`pom.xml`**: Root multimodule Maven build
 
 ## Prerequisites
