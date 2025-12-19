@@ -13,11 +13,9 @@ export const torture = (n) =>
               ? n > 14
                 ? n > 13
                   ? n > 12
-                    ? n > 11
-                      ? n > 10
-                        ? 'double-digits'
-                        : 'just-ten'
-                      : 'almost-ten'
+                    ? n > 10
+                      ? 'double-digits'
+                      : 'just-ten'
                     : 'dozen-minus'
                   : 'bakers-dozen-minus'
                 : 'two-weeks-minus'
