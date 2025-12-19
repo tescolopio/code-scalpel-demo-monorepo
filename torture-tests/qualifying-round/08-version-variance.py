@@ -7,7 +7,8 @@ def divide(a, b):
 result = divide(3, 2)
 
 print('py3-style print keeps working, but beware of:')
-# Python 2 statement form below is expected to raise a SyntaxError in Python 3 parsers
+# Python 2 statement form below is expected to raise a SyntaxError in Python 3 because
+# `print` is no longer a statement there
 print result
 
 # Python 3-only syntax below; Python 2 should choke before reaching it

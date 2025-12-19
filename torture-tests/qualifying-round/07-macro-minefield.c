@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #define KEYWORD int
+// SQL concatenation is intentionally unsafe here to highlight macro-generated risks.
 #define MAKE_HANDLER(name, table)                                      \
   const char *name(const char *user) {                                 \
     static char query[128];                                            \
