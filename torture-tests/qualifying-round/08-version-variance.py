@@ -6,11 +6,14 @@ def divide(a, b):
 
 result = divide(3, 2)
 
-print('py3-style print keeps working, but beware of:')
-# Python 2 statement form below is expected to raise a SyntaxError in Python 3 because
-# `print` is no longer a statement there
-print result
+print('py3-style print keeps working, but beware of version semantics')
+if result == 1:
+    print("Python 2 integer division branch (3/2 == 1)")
+else:
+    print("Python 3 true division branch (3/2 == 1.5)")
 
-# Python 3-only syntax below; Python 2 should choke before reaching it
-def greet(name: str) -> str:
-    return f"hello {name}"
+encoded = b'\xff'
+if isinstance(encoded, str):
+    print("Python 2: bytes are str")
+else:
+    print("Python 3: bytes are distinct from str")

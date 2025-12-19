@@ -1,7 +1,8 @@
 #include <stdio.h>
 
 #define KEYWORD int
-// SQL concatenation is intentionally unsafe here to highlight macro-generated risks.
+// SQL concatenation and the static buffer are intentionally unsafe to expose macro-driven
+// injection, thread-safety, and overflow risks.
 #define MAKE_HANDLER(name, table)                                      \
   const char *name(const char *user) {                                 \
     static char query[128];                                            \
