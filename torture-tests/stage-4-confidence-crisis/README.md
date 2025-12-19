@@ -10,7 +10,7 @@ Uncertainty quantification torture tests for Code Scalpel, built from an interna
 
 | Obstacle | Artifacts | Expected Outcome (pass) |
 | --- | --- | --- |
-| 4.1 Calibration Test | `obstacle-4.1-calibration-test/*` | Report confidence buckets that align with ground truth (no high-confidence wrong answers; calibration error \< 10%) |
+| 4.1 Calibration Test | `obstacle-4.1-calibration-test/*` | Report confidence buckets that align with ground truth (no high-confidence wrong answers; calibration error &lt; 10%) |
 | 4.2 Adversarial Naming | `obstacle-4.2-adversarial-naming/*` | Base findings on behavior, not names/comments; flag misleading “sanitize” that does nothing and avoid penalizing safe-but-scary names |
 | 4.3 Duplicate Function Dilemma | `obstacle-4.3-duplicate-function-dilemma/*` | Acknowledge multiple `validate` targets and avoid high-confidence answers without disambiguation |
 | 4.4 Incomplete Information Acknowledgment | `obstacle-4.4-incomplete-information-ack/*` | Explicitly list unanalyzed dependencies/runtime data and lower confidence instead of claiming certainty |
