@@ -1,0 +1,255 @@
+# =============================================================================
+# CODE SCALPEL POLICY ENGINE - SAMPLE POLICY CONFIGURATION
+# =============================================================================
+#
+# This file defines security policies that the Policy Engine enforces.
+# The Policy Engine prevents AI agents from introducing security vulnerabilities.
+#
+# SECURITY MODEL: FAIL CLOSED
+# - If this file is missing → DENY ALL operations
+# - If this file has invalid YAML → DENY ALL operations
+# - If OPA times out (30s) → DENY the operation
+# - If any exception occurs → DENY the operation
+#
+# =============================================================================
+
+version: "1.0"
+name: "Code Scalpel Security Policy"
+description: "Prevents AI agents from introducing security vulnerabilities"
+
+# Global settings
+settings:
+  fail_closed: true
+  semantic_analysis_enabled: true
+  opa_enabled: false  # Set to true if OPA CLI is installed
+  opa_timeout_seconds: 30
+
+# Severity levels for violations
+severity_levels:
+  critical:
+    action: block
+    description: "Critical vulnerabilities that must be blocked"
+  high:
+    action: block
+    description: "High severity vulnerabilities"
+  medium:
+    action: warn
+    description: "Medium severity issues that should be reviewed"
+  low:
+    action: info
+    description: "Low severity informational findings"
+
+# Language-specific rules
+rules:
+  # ===========================================================================
+  # PYTHON RULES
+  # ===========================================================================
+  python:
+    sql_injection:
+      enabled: true
+      severity: critical
+      patterns:
+        - "f-string with SELECT/INSERT/UPDATE/DELETE"
+        - "%-format with SQL keywords"
+        - ".format() with SQL keywords"
+        - "String concatenation with SQL keywords"
+        - "cursor.execute with f-string"
+      safe_patterns:
+        - "Parameterized queries with placeholders"
+        - "ORM methods without raw SQL"
+
+    command_injection:
+      enabled: true
+      severity: critical
+      patterns:
+        - "subprocess with shell=True"
+        - "os.system with user input"
+        - "os.popen with user input"
+        - "eval() with any input"
+        - "exec() with any input"
+      safe_patterns:
+        - "subprocess with shell=False and list args"
+
+    xss:
+      enabled: true
+      severity: high
+      patterns:
+        - "render_template_string with user input"
+        - "Markup with concatenation"
+        - "| safe filter with user content"
+      safe_patterns:
+        - "render_template from file"
+        - "Auto-escaped Jinja2 templates"
+
+    ssti:
+      enabled: true
+      severity: critical
+      patterns:
+        - "Template() with user input"
+        - "from_string() with user input"
+        - "MakoTemplate with user input"
+      safe_patterns:
+        - "Template from file path"
+
+    path_traversal:
+      enabled: true
+      severity: high
+      patterns:
+        - "open() with concatenation"
+        - "open() with f-string"
+        - "Path() with user input"
+        - "os.path.join with user input"
+      safe_patterns:
+        - "Whitelist-validated filenames"
+        - "Sanitized paths with realpath check"
+
+    secrets:
+      enabled: true
+      severity: critical
+      patterns:
+        - "Hardcoded API keys (sk-, ghp_, xox, AKIA)"
+        - "Hardcoded passwords"
+        - "Private keys in code"
+      safe_patterns:
+        - "Environment variables"
+        - "Secret management systems"
+
+  # ===========================================================================
+  # JAVA RULES
+  # ===========================================================================
+  java:
+    sql_injection:
+      enabled: true
+      severity: critical
+      patterns:
+        - "StringBuilder with SELECT"
+        - "String.format with SQL"
+        - "String concatenation with SQL"
+        - "createStatement().executeQuery"
+      safe_patterns:
+        - "PreparedStatement with parameter binding"
+        - "JPA named parameters"
+
+    command_injection:
+      enabled: true
+      severity: critical
+      patterns:
+        - "Runtime.getRuntime().exec with user input"
+        - "ProcessBuilder with user input"
+      safe_patterns:
+        - "Fixed command arguments"
+
+    xss:
+      enabled: true
+      severity: high
+      patterns:
+        - "out.print with concatenation"
+        - "<%= request.getParameter"
+        - "response.getWriter().write with user input"
+      safe_patterns:
+        - "JSTL c:out with escapeXml"
+        - "Thymeleaf th:text (auto-escaped)"
+
+    ssti:
+      enabled: true
+      severity: critical
+      patterns:
+        - "Freemarker Template with user input"
+        - "Thymeleaf process with user template"
+        - "VelocityEngine with user template"
+      safe_patterns:
+        - "Templates loaded from classpath"
+
+    path_traversal:
+      enabled: true
+      severity: high
+      patterns:
+        - "new File with concatenation"
+        - "new FileInputStream with concatenation"
+        - "Paths.get with concatenation"
+      safe_patterns:
+        - "Whitelist-validated paths"
+
+  # ===========================================================================
+  # TYPESCRIPT/JAVASCRIPT RULES
+  # ===========================================================================
+  typescript:
+    sql_injection:
+      enabled: true
+      severity: critical
+      patterns:
+        - "Template literal with SQL"
+        - "String concatenation with SQL"
+      safe_patterns:
+        - "Parameterized queries"
+        - "ORM query builders"
+
+    command_injection:
+      enabled: true
+      severity: critical
+      patterns:
+        - "exec with concatenation"
+        - "exec with template literal"
+        - "execSync"
+        - "spawn with shell: true"
+        - "child_process with user input"
+      safe_patterns:
+        - "spawn without shell option"
+        - "Fixed command arguments"
+
+    xss:
+      enabled: true
+      severity: high
+      patterns:
+        - "innerHTML assignment"
+        - "outerHTML assignment"
+        - "document.write"
+        - "dangerouslySetInnerHTML"
+        - "jQuery .html() with concatenation"
+      safe_patterns:
+        - "textContent assignment"
+        - "React JSX (auto-escaped)"
+
+    ssti:
+      enabled: true
+      severity: critical
+      patterns:
+        - "ejs.render with concatenation"
+        - "pug.render with user input"
+        - "nunjucks.renderString"
+        - "handlebars.compile with user input"
+      safe_patterns:
+        - "Template from file"
+
+    path_traversal:
+      enabled: true
+      severity: high
+      patterns:
+        - "fs.readFile with concatenation"
+        - "fs.readFileSync with concatenation"
+        - "path.join with user input"
+        - "Dynamic require"
+      safe_patterns:
+        - "Static imports"
+        - "Whitelist-validated paths"
+
+# Change budget limits
+change_limits:
+  max_lines_per_operation: 500
+  max_files_per_operation: 10
+  require_review_above_lines: 200
+
+# Audit logging
+audit:
+  enabled: true
+  log_allowed: true
+  log_denied: true
+  log_violations: true
+  include_code_snippets: false  # Privacy setting
+
+# OPA/Rego configuration (advanced)
+# Uncomment if using OPA for complex custom rules
+# opa:
+#   enabled: true
+#   rego_policy: "/etc/code-scalpel/policies/custom.rego"
+#   timeout_seconds: 30
