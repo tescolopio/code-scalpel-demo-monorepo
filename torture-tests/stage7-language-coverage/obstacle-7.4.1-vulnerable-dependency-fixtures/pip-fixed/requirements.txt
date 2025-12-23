@@ -1,0 +1,4 @@
+# Control versions for dependency scanning fixtures
+# Note: pick versions that should be clean in OSV at the time of test creation.
+Django==5.2.9
+PyYAML==6.0.2

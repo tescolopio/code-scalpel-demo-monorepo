@@ -1,0 +1,10 @@
+{
+  "name": "code-scalpel-ninja-warrior-fixed-fixture",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Control dependency fixture for OSV scanning",
+  "dependencies": {
+    "lodash": "4.17.21",
+    "minimist": "1.2.8"
+  }
+}

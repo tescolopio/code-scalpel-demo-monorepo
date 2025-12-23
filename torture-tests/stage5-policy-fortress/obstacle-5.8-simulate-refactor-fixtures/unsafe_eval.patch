@@ -1,0 +1,7 @@
+--- a/original_unsafe_eval.py
++++ b/original_unsafe_eval.py
+@@
+ def calculate(expr: str) -> int:
+     # expects a simple integer expression
+-    return 0
++    return eval(expr)

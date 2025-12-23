@@ -46,6 +46,9 @@ Thumbs.db
 *~.nib
 __pycache__/
 
+# Code Scalpel local cache
+.scalpel_cache/
+
 # Benchmarks - Industry standard testing repos for Code Scalpel
 benchmarks/cvefixes/
 benchmarks/droidbench/

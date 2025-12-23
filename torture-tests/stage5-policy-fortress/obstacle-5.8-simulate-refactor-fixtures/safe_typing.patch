@@ -1,0 +1,6 @@
+--- a/original_safe_typing.py
++++ b/original_safe_typing.py
+@@
+-def add(a, b):
++def add(a: int, b: int) -> int:
+     return a + b

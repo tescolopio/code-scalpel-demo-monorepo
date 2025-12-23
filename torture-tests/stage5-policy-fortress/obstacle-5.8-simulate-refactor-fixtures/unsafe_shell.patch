@@ -1,0 +1,9 @@
+--- a/original_unsafe_shell.py
++++ b/original_unsafe_shell.py
+@@
+ import subprocess
+ 
+ 
+ def run_tool(arg: str) -> None:
+-    subprocess.run(["echo", arg], check=True)
++    subprocess.run(f"echo {arg}", shell=True, check=True)
