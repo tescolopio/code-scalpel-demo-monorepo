@@ -11,7 +11,7 @@
     <packaging>pom</packaging>
 
     <name>Code Scalpel Demo Monorepo</name>
-    <description>Demonstration monorepo for Code Scalpel v2.5+ and v3.0</description>
+    <description>Demonstration monorepo for Code Scalpel</description>
 
     <modules>
         <module>backend</module>
